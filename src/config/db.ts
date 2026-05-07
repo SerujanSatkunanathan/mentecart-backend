@@ -6,6 +6,10 @@ let mongoServer: MongoMemoryServer;
 
 export const connectDB = async (): Promise<void> => {
   try {
+    if (mongoose.connection.readyState >= 1) {
+      return;
+    }
+    
     let uri = env.MONGODB_URI;
     // Use in-memory MongoDB if configured for localhost in development
     if (uri.includes('localhost') && env.NODE_ENV === 'development') {
