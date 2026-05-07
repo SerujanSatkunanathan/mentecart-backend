@@ -6,12 +6,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { requestLogger } from './middleware/logger.middleware';
 import routes from './routes';
 import swaggerUi from 'swagger-ui-express';
-import fs from 'fs';
-import path from 'path';
-
-const swaggerDocument = JSON.parse(
-  fs.readFileSync(path.resolve(process.cwd(), 'docs/swagger.json'), 'utf8')
-);
+import swaggerDocument from '../docs/swagger.json';
 /**
  * Express app factory.
  * Creates and configures the Express application with all middleware and routes.
