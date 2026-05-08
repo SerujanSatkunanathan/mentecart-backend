@@ -1,4 +1,4 @@
-import { ClientSession } from 'mongoose';
+import mongoose, { ClientSession, Types } from 'mongoose';
 import { ServiceModel } from '../models/Service.model';
 import { SlotModel } from '../models/Slot.model';
 import { IService, ISlot, PaginatedResult } from '../types';
@@ -43,19 +43,29 @@ export class ServiceRepository {
 
   async findAvailableSlots(serviceId: string, fromDate: Date, toDate: Date): Promise<ISlot[]> {
     const slots = await SlotModel.find({
-      serviceId,
+      serviceId: new Types.ObjectId(serviceId),
       date: { $gte: fromDate, $lte: toDate },
       $expr: { $lt: ['$booked', '$capacity'] },
     })
       .sort({ date: 1, startTime: 1 })
-      .lean({ virtuals: true });
-    return slots as ISlot[];
+      .lean();
+      
+    // Explicitly add the isAvailable property since lean() strips virtuals
+    return slots.map(slot => ({
+      ...slot,
+      isAvailable: slot.booked < slot.capacity
+    })) as unknown as ISlot[];
   }
 
   async findSlotById(slotId: string, session?: ClientSession): Promise<ISlot | null> {
     const query = SlotModel.findById(slotId);
     if (session) query.session(session);
-    const slot = await query.lean({ virtuals: true });
+    const slot = await query.lean();
+    
+    if (slot) {
+      (slot as any).isAvailable = slot.booked < slot.capacity;
+    }
+    
     return slot as ISlot | null;
   }
 
@@ -85,6 +95,44 @@ export class ServiceRepository {
       { new: true, session }
     ).lean({ virtuals: true });
     return slot as ISlot | null;
+  }
+
+  /**
+   * Auto-replenishes slots for the next 7 days if they run out.
+   * This is useful for keeping the demo functional over time.
+   */
+  async replenishDemoSlots(serviceId: string, capacityPerSlot: number): Promise<void> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const slotsData = [];
+
+    for (let i = 1; i <= 7; i++) {
+      const date = new Date(today);
+      date.setDate(date.getDate() + i);
+
+      slotsData.push({
+        serviceId,
+        date: date,
+        startTime: '09:00',
+        endTime: '10:00',
+        capacity: capacityPerSlot,
+        booked: 0,
+      });
+      slotsData.push({
+        serviceId,
+        date: date,
+        startTime: '14:00',
+        endTime: '15:00',
+        capacity: capacityPerSlot,
+        booked: 0,
+      });
+    }
+
+    try {
+      await SlotModel.insertMany(slotsData, { ordered: false });
+    } catch (e) {
+      // Ignore duplicate key errors if some slots already exist
+    }
   }
 }
 

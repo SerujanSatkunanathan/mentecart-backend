@@ -93,7 +93,7 @@ export interface ICartResponse {
 
 // ─── Booking ─────────────────────────────────────────────
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'failed';
-export type PaymentMethod = 'payhere' | 'cash' | 'pay_on_arrival';
+export type PaymentMethod = 'payhere' | 'cash' | 'pay_on_arrival' | 'cash_on_delivery';
 export type PaymentStatus = 'unpaid' | 'paid' | 'failed' | 'refunded';
 
 export interface IBookingItem {

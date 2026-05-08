@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed | MenteCart</title>
+    <!-- Use modern Outfit font for a premium look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Abstract gradient background elements -->
+    <div class="background-effects">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+    
+    <main class="confirmation-container">
+        <div class="glass-card">
+            <!-- Animated Checkmark Icon -->
+            <div class="success-icon-container">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            
+            <h1 class="title">Booking Confirmed!</h1>
+            <p class="subtitle">Your session has been successfully scheduled. We've sent a confirmation email to <span class="highlight">user@example.com</span>.</p>
+
+            <!-- Booking Details Card -->
+            <div class="booking-details">
+                <div class="detail-row">
+                    <span class="label">Mentor</span>
+                    <span class="value mentor-name">
+                        <!-- Placeholder avatar with premium styling -->
+                        <img src="https://i.pravatar.cc/150?img=68" alt="Mentor avatar" class="avatar">
+                        Dr. Jane Smith
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Date & Time</span>
+                    <span class="value">Oct 24, 2026 • 10:00 AM PST</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Session Type</span>
+                    <span class="value">1-on-1 Career Coaching</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Booking Ref</span>
+                    <span class="value reference">#MC-847291</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="actions">
+                <button class="btn btn-primary" id="calendar-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Add to Calendar
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='#'">View Dashboard</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

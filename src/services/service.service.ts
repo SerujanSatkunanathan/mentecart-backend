@@ -25,7 +25,13 @@ export class ServiceService {
     toDate.setDate(toDate.getDate() + SLOT_LOOKAHEAD_DAYS);
     toDate.setHours(23, 59, 59, 999);
 
-    const slots = await serviceRepository.findAvailableSlots(serviceId, fromDate, toDate);
+    let slots = await serviceRepository.findAvailableSlots(serviceId, fromDate, toDate);
+
+    // Auto-replenish slots for demo purposes if none exist (prevents demo from expiring)
+    if (slots.length === 0 && service.capacityPerSlot) {
+      await serviceRepository.replenishDemoSlots(serviceId, service.capacityPerSlot);
+      slots = await serviceRepository.findAvailableSlots(serviceId, fromDate, toDate);
+    }
 
     return { service, slots };
   }

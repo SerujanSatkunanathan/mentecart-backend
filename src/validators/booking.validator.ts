@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const checkoutSchema = z.object({
-  paymentMethod: z.enum(['payhere', 'cash', 'pay_on_arrival'], {
-    errorMap: () => ({ message: 'Payment method must be payhere, cash, or pay_on_arrival' }),
+  paymentMethod: z.enum(['payhere', 'cash', 'pay_on_arrival', 'cash_on_delivery'], {
+    errorMap: () => ({ message: 'Payment method must be payhere, cash, pay_on_arrival, or cash_on_delivery' }),
   }),
 });
 

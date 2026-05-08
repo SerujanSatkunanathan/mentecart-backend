@@ -74,7 +74,7 @@ const bookingSchema = new Schema<IBookingDocument>(
     },
     paymentMethod: {
       type: String,
-      enum: ['payhere', 'cash', 'pay_on_arrival'] as PaymentMethod[],
+      enum: ['payhere', 'cash', 'pay_on_arrival', 'cash_on_delivery'] as PaymentMethod[],
       required: true,
     },
     paymentStatus: {

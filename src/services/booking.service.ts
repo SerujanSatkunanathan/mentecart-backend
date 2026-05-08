@@ -106,6 +106,10 @@ export class BookingService {
     const session = await mongoose.startSession();
 
     try {
+      if (paymentMethod === 'payhere' && env.NODE_ENV === 'development') {
+        throw new AppError(400, 'PAYMENT_DISABLED', 'PayHere is disabled for development. Please use Cash on Delivery.');
+      }
+
       let result: { booking: IBooking; paymentUrl?: string } | undefined;
 
       await session.withTransaction(async () => {
@@ -166,7 +170,7 @@ export class BookingService {
         cancelCutoff.setHours(cancelCutoff.getHours() - CANCEL_CUTOFF_HOURS);
 
         // 5. Determine initial status based on payment method
-        const isCashFlow = paymentMethod === 'cash' || paymentMethod === 'pay_on_arrival';
+        const isCashFlow = paymentMethod === 'cash' || paymentMethod === 'pay_on_arrival' || paymentMethod === 'cash_on_delivery';
         const initialStatus: BookingStatus = isCashFlow ? 'confirmed' : 'pending';
         const initialPaymentStatus = 'unpaid' as const;
 

@@ -41,9 +41,13 @@ export class CartService {
       throw new AppError(409, 'SLOT_FULL', 'No capacity remaining for this slot.');
     }
 
-    // Check if slot date is in the past
-    const now = new Date();
-    if (new Date(slot.date) < now) {
+    // Check if slot date is in the past (ignoring time to avoid timezone issues)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const slotDate = new Date(slot.date);
+    slotDate.setHours(0, 0, 0, 0);
+
+    if (slotDate < today) {
       throw new AppError(400, 'SLOT_EXPIRED', 'This slot is in the past.');
     }
 
